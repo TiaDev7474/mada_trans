@@ -13,12 +13,14 @@ class Car
     public int $frais;
 
     public array $place;
+    public $date;
 
-    public function __construct($car, $place)
+    public function __construct($car, $place, $date)
     {
         $this->carId = $car['id_voit'];
         $this->design = $car['design'];
         $this->nbr_place = $car['nbr_place'];
+        $this->date = $date;
         $this->frais = $car['frais'];
         $this->place = $place;
     }
@@ -39,22 +41,25 @@ class CarRepository
             'date' => $trip_criteria['date']
 
         ];
-        if (!empty($_GET['category'])) {
+        if (!empty($trip_criteria['category']) && $trip_criteria['category'] !== 'Tous') {
             $query .= " AND V.type =:category";
-            $params['category'] = strtolower($_GET['category']);
+            $params['category'] = strtolower($trip_criteria['category']);
         }
 
         // var_dump($query);
         $carsStatement = $this->connection->getConnection()->prepare($query);
-        $placeStatement = $this->connection->getConnection()->prepare('SELECT place,occupation  FROM place WHERE id_voit=?');
-
+        $placeStatement = $this->connection->getConnection()->prepare('SELECT place,occupation FROM place WHERE id_voit=?');
+        $dateStatement = $this->connection->getConnection()->prepare("SELECT DATE_FORMAT(date_dep, ' %Hh%imin') AS date FROM departure WHERE id_voit=?");
         $carsStatement->execute($params);
 
         $cars = [];
         while ($row = $carsStatement->fetch()) {
             $placeStatement->execute([$row['id_voit']]);
+            $dateStatement->execute([$row['id_voit']]);
             $place = $placeStatement->fetchAll();
-            $car = new Car($row, $place);
+            // var_dump($place);
+            $date = $dateStatement->fetch();
+            $car = new Car($row, $place, $date);
             $cars[] = $car;
 
         }

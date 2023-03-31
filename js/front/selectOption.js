@@ -16,7 +16,7 @@
    
    const cityData=['Antananarivo','Fianarantsoa','Toamasina','Mahajanga','Antsirabe','Toliara']
 
-
+ 
  /*_________________*/
 
 /* departure select handler*/
@@ -29,6 +29,7 @@
      item.addEventListener('click' , () =>{
           dep_select.value=item.textContent.trim();
           city_dep_container.classList.toggle('hidden')
+        
      })
  })
 
@@ -61,21 +62,13 @@ item.addEventListener('click' , () =>{
 })
 })
 
+/** checkbox  */
+
+const inputRadio= document.querySelectorAll("input[type='radio']")
+
+console.log(inputRadio)
 
 
-
-//  function createSelectOption (optionList){
-//        let selectHtml = document.createElement('html')
-//        selectHtml.innerHTML = `<div class='absolute top-3 left-0' id='select_departure'>`
-//       optionList.map(city => {
-//             selectHtml.innerHTML += `<li class='option_item '>${city}</li>`
-           
-
-//       });
-//             selectHtml.innerHTML +=`</div>`;
-          
-//       city_dep_container.innerHTML+= selectHtml;
-//       console.log(city_dep_container)
          
  
 
